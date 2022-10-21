@@ -52,8 +52,18 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
-var scope = app.Services.CreateScope();
-scope.ServiceProvider.GetRequiredService<IDbinitializer>().Initialize();
+
+// var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using (var scope = scopeFactory.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    context.Database.Migrate();
+}
+
+var scope1 = app.Services.CreateScope();
+scope1.ServiceProvider.GetRequiredService<IDbinitializer>().Initialize();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

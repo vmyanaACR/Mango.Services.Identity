@@ -53,6 +53,7 @@ app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
 
+
 // var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (var scope = scopeFactory.CreateScope())
